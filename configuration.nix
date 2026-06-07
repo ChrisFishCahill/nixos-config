@@ -79,10 +79,8 @@ let
       sdmTMB fmesher sf glmmTMB
 
       # Stan
-      # tmbstan removed — OOM during compilation, install manually:
-      # Rscript -e "install.packages('tmbstan')"
+      tmbstan
       bayesplot
-
       # cmdstanr: not in nixpkgs, install once per user manually:
       # Rscript -e "install.packages('cmdstanr',
       #   repos=c('https://stan-dev.r-universe.dev',
