@@ -139,10 +139,21 @@ in {
   # ------------------------------------------------------------------ #
   # Desktop                                                             #
   # ------------------------------------------------------------------ #
-  services.xserver.enable = true;
-  services.xserver.displayManager.gdm.enable = true;
-  services.xserver.desktopManager.gnome.enable = true;
-  services.xserver.xkb = { layout = "us"; variant = ""; };
+  services.xserver.enable = false;
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+    xwayland.enable = true;
+  };
+  services.greetd = {
+    enable = true;
+    settings.default_session = {
+    command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
+      user = "greeter";
+    };
+  };
+  xdg.portal.enable = true;
+  xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 
   # ------------------------------------------------------------------ #
   # Audio                                                               #
@@ -194,6 +205,15 @@ in {
       user.email = "christopherfishcahill@gmail.com";
     };
   };
+  
+  #-------------------------------------------------------------------- #
+  # uwsm stuff
+  #-------------------------------------------------------------------- #
+  programs.bash.loginShellInit = ''
+  if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
+    exec uwsm start hyprland-uwsm.desktop
+  fi
+'';
 
   # ------------------------------------------------------------------ #
   # Fonts                                                               #
@@ -220,11 +240,11 @@ in {
 
     # CLI
     vim neovim bat tealdeer tmux htop ripgrep nodejs openssh
-    fastfetch pandoc quarto tree-sitter fd chezmoi
+    fastfetch pandoc quarto tree-sitter fd chezmoi greetd tuigreet
 
     # GUI
     mullvad zotero libreoffice foliate rofi ghostty remmina forgejo
-    firefox rstudio kdePackages.okular
+    firefox rstudio kdePackages.okular adwaita-icon-theme
   ];
 
   # ------------------------------------------------------------------ #
@@ -249,6 +269,7 @@ in {
   services.openssh.enable = true;
   services.printing.enable = true;
   services.spice-vdagentd.enable = true;   # clipboard in VM
+  services.mullvad-vpn.enable = true;
 
   system.stateVersion = "26.05";
 }
