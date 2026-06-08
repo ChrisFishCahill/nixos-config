@@ -180,7 +180,6 @@ in {
   # Nix settings                                                        #
   # ------------------------------------------------------------------ #
   nixpkgs.config.allowUnfree = true;
-  # Note: parallel OpenBLAS is the default in nixpkgs — no overlay needed
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.auto-optimise-store = true;
