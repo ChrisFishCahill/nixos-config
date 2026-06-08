@@ -243,12 +243,17 @@ in {
   ];
 
   # ------------------------------------------------------------------ #
-  # Shell aliases                                                       #
+  # Shell aliases and init                                             #
   # ------------------------------------------------------------------ #
   environment.shellAliases = {
     vim = "nvim";
   };
 
+  environment.shellInit = ''
+    export LD_PRELOAD=${pkgs.openblas}/lib/libopenblas.so
+    export OPENBLAS_NUM_THREADS=$(nproc)
+  '';
+  
   # ------------------------------------------------------------------ #
   # Environment variables — applied to all users' shells                #
   # ------------------------------------------------------------------ #
