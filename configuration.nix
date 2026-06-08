@@ -249,11 +249,6 @@ in {
     vim = "nvim";
   };
 
-  environment.shellInit = ''
-    export LD_PRELOAD=${pkgs.openblas}/lib/libopenblas.so
-    export OPENBLAS_NUM_THREADS=$(nproc)
-  '';
-  
   # ------------------------------------------------------------------ #
   # Environment variables — applied to all users' shells                #
   # ------------------------------------------------------------------ #
@@ -262,7 +257,10 @@ in {
     CFLAGS   = "-Wno-format-security";
     CXXFLAGS = "-Wno-format-security";
   };
-
+  environment.shellInit = ''
+    export LD_LIBRARY_PATH=${pkgs.openblas}/lib:$LD_LIBRARY_PATH
+    export LD_PRELOAD=${pkgs.openblas}/lib/libopenblas.so
+  '';
   # ------------------------------------------------------------------ #
   # Services                                                            #
   # ------------------------------------------------------------------ #
