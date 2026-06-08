@@ -257,10 +257,12 @@ in {
     CFLAGS   = "-Wno-format-security";
     CXXFLAGS = "-Wno-format-security";
   };
-  environment.shellInit = ''
-    export LD_LIBRARY_PATH=${pkgs.openblas}/lib:$LD_LIBRARY_PATH
-    export LD_PRELOAD=${pkgs.openblas}/lib/libopenblas.so
-  '';
+  nixpkgs.overlays = [
+   (final: prev: {
+     blas   = prev.blas.override   { blasProvider   = final.openblas; };
+     lapack = prev.lapack.override { lapackProvider = final.openblas; };
+   })
+  ];
   # ------------------------------------------------------------------ #
   # Services                                                            #
   # ------------------------------------------------------------------ #
