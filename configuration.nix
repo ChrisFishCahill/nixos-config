@@ -145,13 +145,13 @@ in {
     withUWSM = true;
     xwayland.enable = true;
   };
-  services.greetd = {
-    enable = true;
-    settings.default_session = {
-    command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --cmd start-hyprland";
-      user = "greeter";
-    };
-  };
+  # services.greetd = {
+  #  enable = true;
+  #  settings.default_session = {
+  #  command = "${pkgs.greetd.tuigreet}/bin/tuigreet --time --user-menu --cmd start-hyprland";
+  #    user = "cc";
+  #  };
+  #};
   xdg.portal.enable = true;
   xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-hyprland ];
 
@@ -207,13 +207,8 @@ in {
   };
   
   #-------------------------------------------------------------------- #
-  # uwsm stuff
+  # greeter stuff
   #-------------------------------------------------------------------- #
-  programs.bash.loginShellInit = ''
-  if [ -z "$WAYLAND_DISPLAY" ] && [ "$XDG_VTNR" = 1 ]; then
-    exec uwsm start hyprland-uwsm.desktop
-  fi
-'';
 
   # ------------------------------------------------------------------ #
   # Fonts                                                               #
@@ -244,7 +239,7 @@ in {
 
     # GUI
     mullvad zotero libreoffice foliate rofi ghostty remmina forgejo
-    firefox rstudio kdePackages.okular adwaita-icon-theme
+    firefox rstudio kdePackages.okular adwaita-icon-theme swaybg waybar
   ];
 
   # ------------------------------------------------------------------ #
