@@ -70,6 +70,14 @@ let
   in oldpkgs.quarto;
 
   # ------------------------------------------------------------------ #
+  # zen-browser: not in nixpkgs, pulled from community flake            #
+  # pinned to a rev so eval stays pure; bump REV to update              #
+  # ------------------------------------------------------------------ #
+  zen = (builtins.getFlake
+    "github:0xc000022070/zen-browser-flake/f13e82162fae68af7716147207fa5f868f5ca381"
+  ).packages.${pkgs.stdenv.hostPlatform.system}.default;
+
+  # ------------------------------------------------------------------ #
   # R environment with all packages bundled                             #
   # ------------------------------------------------------------------ #
   rEnv = pkgs.rWrapper.override {
@@ -79,11 +87,15 @@ let
       sdmTMB fmesher sf glmmTMB
 
       # Stan
-      tmbstan bayesplot
+      tmbstan
+      bayesplot
       # cmdstanr: not in nixpkgs, install once per user manually:
       # Rscript -e "install.packages('cmdstanr',
       #   repos=c('https://stan-dev.r-universe.dev',
       #           'https://cloud.r-project.org'))"
+
+      # Occupancy / abundance
+      unmarked
 
       # Stats
       nlme mgcv tidyverse
@@ -176,6 +188,7 @@ in {
   # Nix settings                                                        #
   # ------------------------------------------------------------------ #
   nixpkgs.config.allowUnfree = true;
+  # Note: parallel OpenBLAS is the default in nixpkgs — no overlay needed
 
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
   nix.settings.auto-optimise-store = true;
@@ -235,6 +248,7 @@ in {
     # GUI
     mullvad zotero libreoffice foliate rofi ghostty remmina forgejo
     firefox rstudio kdePackages.okular adwaita-icon-theme swaybg waybar
+    zen
   ];
 
   # ------------------------------------------------------------------ #
